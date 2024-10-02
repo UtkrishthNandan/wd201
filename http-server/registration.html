@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration <Form></Form></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="relative flex min-h-screen flex-col justify-center overflow-hidden py-6 bg-gray-50">
+        <div class="relative bg-white px-6 pt-5 pb-5 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-lg sm:rounded-lg sm:px-10">
+            <div class="mx-auto max-w-md">
+                <h2 class="text-3xl text-center font-bold leading-tight">
+                    Registration Form
+                </h2>
+                <div class="divide-y divide-gray-300/50">
+                    <div class="space-y-6 py-8 text-base leading-7 text-gray-600">
+                        <form id="user_form" method="get" action="/registration">
+                            <label for="name" class="text-md w-40 inline-block font-medium leading-5 text-gray-700">
+                                Name
+                            </label>
+                            <input required type="text" id="name" name="name"
+                            class="bg-gray-100 inline-block rounded-lg shadow-md px-4 py-3 mb-5 text-base leading-6 placeholder-gray-500"></br>
+                         
+                            <label for="email" class="text-md w-40 inline-block font-medium leading-5 text-gray-700">
+                                Email
+                            </label>
+                            <input required type="email" id="email" name="email"
+                            class="bg-gray-100 inline-block rounded-lg shadow-md px-4 py-3 mb-5 text-base leading-6 placeholder-gray-500"></br>
+                         
+                            <label for="password" class="text-md w-40 inline-block font-medium leading-5 text-gray-700">
+                                Password
+                            </label>
+                            <input required type="password" id="password" name="password"
+                            class="bg-gray-100 inline-block rounded-lg shadow-md px-4 py-3 mb-5 text-base leading-6 placeholder-gray-500"></br>
+                         
+                            <label for="dob" class="text-md w-40 inline-block font-medium leading-5 text-gray-700">
+                                Date of Birth
+                            </label>
+                            <input required type="date" id="dob" name="dob"
+                            class="bg-gray-100 inline-block rounded-lg shadow-md px-4 py-3 mb-5 text-base leading-6 placeholder-gray-500"></br>
+                            <label for="acceptTerms" class="text-md w-40 inline-block font-medium leading-5 text-gray-700">
+                                Accept Terms & Conditions
+                            </label>
+                            <input  type="checkbox" id="acceptTerms" name="acceptTerms"
+                            class="bg-gray-100 inline-block rounded-lg shadow-md px-4 py-3 mb-5 text-base leading-6 placeholder-gray-500"></br>
+                            
+                         
+                            <button type="submit" class="bg-green-600 rounded-lg inline-block text-white py-3 px-3">Submit</button>
+                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div 
+        class="relative bg-white px-10 mt-5 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:rounded-lg sm:px-10">
+        <div class="mx-auto">
+            <h2 class="text-2xl text-center font-bold leading-tight">
+                Entries
+            </h2>
+            <div class="divide-y divide-gray-300/50"  id="user-entries">
+
+            </div>
+        </div>
+    </div>
+    <script>
+        const email=document.getElementById('email');
+        email.addEventListener('input',()=>{
+            validateEmail(email);
+        });
+        const validateEmail=(element)=>{
+            if(element.validity.typeMismatch){
+                element.setCustomValidity("The Email is not in the right format!!!");
+                element.reportValidity();
+            }
+            else{
+                element.setCustomValidity('');
+            }
+        };
+        
+        const dobElement=document.getElementById("dob");
+        dobElement.addEventListener('input',()=>{
+            validateAge(dobElement);
+        });
+        const validateAge=(element)=>{
+            let date_arr=element.value.split("-");//YYYY-MM-DD
+            date_arr_num=[];
+            date_arr.forEach(element => {
+                date_arr_num.push(parseInt(element));
+            });
+            const todayDate=new Date();
+            let today_date_arr_num=[todayDate.getFullYear(),todayDate.getMonth()+1,todayDate.getDate()];
+            console.log(date_arr_num);
+            console.log(today_date_arr_num);
+            if(!(today_date_arr_num[0]-date_arr_num[0]>=18 && today_date_arr_num[0]-date_arr_num[0]<=55)){
+                element.setCustomValidity("The age should be between 18 and 55");
+                element.reportValidity();
+            }else{
+                if(today_date_arr_num[0]-date_arr_num[0]==18){
+                    console.log("18 years difference");
+                    if(today_date_arr_num[1]<date_arr_num[1]){
+                        console.log("Month not passed");
+                        element.setCustomValidity("The age should be between 18 and 55");
+                        element.reportValidity();
+                    }
+                    else if(today_date_arr_num[1]==date_arr_num[1]){
+                        console.log("Same month");
+                        if(today_date_arr_num[2]<date_arr_num[2]){
+                            console.log("Date not passed");
+                            element.setCustomValidity("The age should be between 18 and 55");
+                            element.reportValidity();
+                        }
+                        else{
+                            console.log("Date passed");
+                            element.setCustomValidity('');
+                        }
+
+                    }
+                    else{
+                        console.log("Month passed");
+                        element.setCustomValidity('');
+                    }
+
+                }else if(today_date_arr_num[0]-date_arr_num[0]==55){
+                    console.log("55 years difference");
+                    if(today_date_arr_num[1]>date_arr_num[1]){
+                        console.log("Month already passed");
+                        element.setCustomValidity("The age should be between 18 and 55");
+                        element.reportValidity();
+                    }
+                    else if(today_date_arr_num[1]==date_arr_num[1]){
+                        console.log("Same Month");
+                        if(today_date_arr_num[2]>=date_arr_num[2]){
+                            console.log("Date already passed");
+                            element.setCustomValidity("The age should be between 18 and 55");
+                            element.reportValidity();
+                        }
+                        else{
+                            console.log("Date did not pass yet");
+                            element.setCustomValidity('');
+                        }
+
+                    }
+                    else{
+                        console.log("Month not passed");
+                        element.setCustomValidity('');
+                    }
+                }
+                else{
+                    element.setCustomValidity('');
+                }
+            }
+        }
+    </script>
+    <script src="./registration.js"></script>
+
+    
+</body>
+</html>
